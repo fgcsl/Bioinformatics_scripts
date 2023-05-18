@@ -1,5 +1,5 @@
 # Bioinformatics_scripts
-## To download bioproject study from NCBI
+## 1. To download bioproject study from NCBI
 ### Requirements 
 Download SRA Tool form the link (https://www.metagenomics.wiki/tools/short-read/ncbi-sra-file-format/sra-tools-install)
 
