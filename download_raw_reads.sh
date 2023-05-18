@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-##
+
 #study download and split sra files
 
 if [ -f bioproject_ids.txt ]
@@ -23,10 +23,11 @@ done | sed 'N;s/\n/ /g' | awk '{
                                         print "\033[5;41m Error:\033[0m \033[1;41m " $1 " \033[0m\033[45mthis study not downloaded properly\033[0m"
                                 }'
 
-#Run fastq-dump command and saving in raw_reads directory
+#Run fastq-dump command and save the result under raw_reads directory
+
 mkdir -p raw_reads
-for _split_sra in prefetch_data/*/*/*;
-do
-        $_split_sra | cut -d "/" -f2 | sed 's/.*/fastq-dump -O raw_reads\/& --split-3/g' | xargs -I {} echo {} "$_split_sra";
-        echo -e "\033[42mSample split:\033[0m \033[44;5mSuccessfully\033[0m"
+for _split_sra in prefetch_data/*/*/*; do
+    cmd=$(echo "$_split_sra" | cut -d "/" -f2 | sed 's/.*/fastq-dump -O raw_reads\/& --split-3/g')
+    eval "$cmd" "$_split_sra"
+    echo -e "\033[42mSample split:\033[0m \033[44;5mSuccessfully\033[0m"
 done
