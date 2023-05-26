@@ -3,7 +3,7 @@
 ### Requirements 
 Download SRA Tool form the link (https://www.metagenomics.wiki/tools/short-read/ncbi-sra-file-format/sra-tools-install)
 
-## Step 1. Download Raw sequences (SRR) from NCBI and Perform fasterq-dump for extract data in Fastq from SRA-accessions
+### Step 1. Download Raw sequences (SRR) from NCBI and Perform fasterq-dump for extract data in Fastq from SRA-accessions
 
 1) Open bioproject_sample_ids.txt file and edit it with your bioproject and sample ID's which you want to download
 
@@ -15,7 +15,7 @@ $./download_raw_reads.sh
 
 *Note you will get all downloaded sample with BioprojectID folder in the data_sets directory
 ```
-## Step 2. Merging sequence and perform blastn with silva database
+### Step 2. Merging sequence and perform blastn with silva database
 
 
 
