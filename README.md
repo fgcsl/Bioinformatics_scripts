@@ -1,8 +1,9 @@
 # Amplicon region and Primer deduction
 
 ### Requirements 
-Download SRA Tool form the link (https://www.metagenomics.wiki/tools/short-read/ncbi-sra-file-format/sra-tools-install)
-Download bbtools and local-blast
+1. Download SRA Tool form the link (https://www.metagenomics.wiki/tools/short-read/ncbi-sra-file-format/sra-tools-install)
+2. Download bbtools and local-blast
+3. Silvadb: silva.fasta
 
 #### Step 1. Download Raw sequences (SRR) from NCBI and Perform fasterq-dump for extract data in Fastq from SRA-accessions
 
