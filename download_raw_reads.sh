@@ -2,32 +2,56 @@
 
 #study download and split sra files
 
-if [ -f bioproject_ids.txt ]
+# Access the input directory value from environment variable
+
+_ids_file_="bioproject_sample_ids.txt"
+
+
+if [[ $(awk '{print $2}'  $_ids_file_ | grep "PRJ") ]];
 then
-        mkdir prefetch_data
-        while read -r line; 
-        do
-                echo "prefetch $line && mkdir prefetch_data/$line && mv SRR* prefetch_data/$line";
-        done < bioproject_ids.txt |sh
-else
-        echo "\"bioproject_ids.txt\" list of ids file not found"
+	echo "Error: Study ID should be in first column, file format error in $_ids_file_"; 
+	exit 1
 fi
 
-#validation: check all the study are downloaded or not in single .sra formatt
-for i in prefetch_data/*/*;
+
+if [ -s $_ids_file_ ]
+then
+	while read -r col1 col2;
+	do
+		echo "prefetch" -O data_sets/$col1 $col2;
+	done <  $_ids_file_ |sh	
+else
+	echo -e  "Error: \"$_ids_file_\" list of sample ids file not found"
+	exit 1
+fi
+
+
+#validation: check all the study are downloaded or not in single .sra  format
+
+while read -r col1 col2;
 do
-        echo $i;
-        ls $i | wc -l;
-done | sed 'N;s/\n/ /g' | awk '{
-                                if ($2>1 || $2==0) 
-                                        print "\033[5;41m Error:\033[0m \033[1;41m " $1 " \033[0m\033[45mthis study not downloaded properly\033[0m"
-                                }'
+	for i in data_sets/$col1/$col2;
+	do
+		echo $i;
+		ls $i | wc -l;
+	done | sed 'N;s/\n/ /g' | awk '{
+		if ($2>1 || $2==0) 
+		print "Error: " $1 " this study not downloaded properly"
+	}'
+done < $_ids_file_
+
 
 #Run fastq-dump command and save the result under raw_reads directory
 
-mkdir -p raw_reads
-for _split_sra in prefetch_data/*/*/*; do
-    cmd=$(echo "$_split_sra" | cut -d "/" -f2 | sed 's/.*/fastq-dump -O raw_reads\/& --split-3/g')
-    eval "$cmd" "$_split_sra"
-    echo -e "\033[42mSample split:\033[0m \033[44;5mSuccessfully\033[0m"
-done
+while read -r col1 col2;
+do
+	cmd=$(echo "fastq-dump" -O data_sets/$col1/raw_reads/ "--split-3" data_sets/$col1/$col2/*.sra)
+	eval $cmd 
+	if [ "$(find data_sets/$col1/raw_reads/ -type f \( -name '*_1.fastq' -o -name '*_2.fastq' -o -name '*_R1.fastq' -o -name '*_R2.fastq' -o -name '_R1_001.fastq' -o -name '*_R2_001.fastq' \))" ]
+	then
+		echo  "Sample split: Successfully"
+	else
+		echo  "Error: Study-ID: $col1  sample-ID: $col2 may be samples have multiple run, it did't splits sra reads into forward/reverse fastq format" | tee -a warning
+	fi
+
+done < $_ids_file_ 
