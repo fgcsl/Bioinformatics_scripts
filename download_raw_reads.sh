@@ -1,11 +1,10 @@
 #!/usr/bin/bash
 
-#study download and split sra files
+## This script Written by  Abhishek Khatri 
+## Remember to edit bioproject_sample_ids.txt file according to your study and sample ids
 
-# Access the input directory value from environment variable
 
 _ids_file_="bioproject_sample_ids.txt"
-
 
 if [[ $(awk '{print $2}'  $_ids_file_ | grep "PRJ") ]];
 then
