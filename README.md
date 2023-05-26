@@ -32,7 +32,7 @@ $ ./mergeblast.sh
 ```
 
 
-### Outputs will come under data_sets directory
+### Outputs will be store under data_sets directory
 
 ```
 01. data_sets => this is the main folder all the downloaded and output file will be stored under this directory
