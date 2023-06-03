@@ -51,6 +51,23 @@ for index, row in df.iterrows():
             with open ("error.log","a") as file:
                 print(warning_message, file=file)
 
+# makedb and  blastn
+def makeblast():
+    if os.path.exists("silva.fasta"):
+        makedb_command=[
+            "makeblastdb",
+            "-in",
+            "silva.fasta",
+            "-dbtype",
+            "nucl",
+            "-out",
+            "silvadb_out/silva"
+        ]
+        subprocess.run(makedb_command)
+    else:
+        print("Error: Faild to makeblastdb, silva.fasta file not found in the current working directory")
+        sys.exit(1)
+makeblast()
 
 ########### seqtk fastq to fasta
 
@@ -58,6 +75,7 @@ def seqtk_blastn(df):
     for index, row in df.iterrows():
         study_id = row[0]
         sample_id = row[1]
+        output_dir=("data_sets/{}/output".format(study_id))
         output_path=("data_sets/{}/output/{}.fastq".format(study_id, sample_id))
         fasta_list=output_path.replace("fastq","fasta")
         t20=os.path.dirname(fasta_list)+"/t20_seq.fas"
@@ -65,18 +83,38 @@ def seqtk_blastn(df):
         if os.path.exists(output_path):
             
             seqtk_shell = [
-                "seqtk seq -a " + output_path + " > " + output_path.replace("fastq","fasta")
+                "seqtk",
+                "seq",
+                "-a",
+                output_path, 
+                " > ", 
+                output_path.replace("fastq","fasta")
             ]
 
             #top 60 Extract only few reads from SRR*.fasta from each study
 
             extraxt_60_reads = [
-                "head -60 " + fasta_list + " > " + t20
+                "head",
+                "-60",
+                fasta_list,
+                " > ",
+                t20
                 
             ]
 
-            subprocess.run(seqtk_shell)
-            subprocess.run(extraxt_60_reads)
+            blstn_shell = [
+                "blastn", 
+                "-query",
+                t20,
+                "-db", "silvadb_out/silva",
+                "-out",
+                output_dir+"/blastn_output.txt"
+                
+            ]
+
+            subprocess.run(" ".join(seqtk_shell), shell=True)
+            subprocess.run(" ".join(extraxt_60_reads), shell=True)
+            subprocess.run(blstn_shell)
             
         else:
             seqtk_error=("Error: Study ID: "+ study_id +" - fastq file not found, faild to change fastq to fasta format")
@@ -86,7 +124,7 @@ def seqtk_blastn(df):
                 
 seqtk_blastn(df)
 
-
+#testing 
 for index, row in df.iterrows():
         study_id = row[0]
         sample_id = row[1]
@@ -103,9 +141,8 @@ for index, row in df.iterrows():
             with open("error.log","a") as file:
                     print(blastn_notexist_err, file=file)
             #print("Error: Study ID: {} faild blastn_output.txt file not exist.".format(study_id))
-            
-# Error handling - 
-# Extract error study ids from error.log file and remove if from bioproject_sample_ids.txt
+
+#Extract error study ids from error.log file and remove if from bioproject_sample_ids.txt
 
 error_file="error.log"
 prj_ids = set()
