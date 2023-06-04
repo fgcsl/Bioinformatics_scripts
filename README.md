@@ -1,19 +1,26 @@
 # Amplicon region and Primer deduction
 
 ### Requirements 
-1. Download SRA Tool form the link (https://www.metagenomics.wiki/tools/short-read/ncbi-sra-file-format/sra-tools-install)
-2. Download bbtools and local-blast
-3. Silvadb: silva.fasta
+1. python3
+# Python Modules:
+* import subprocess
+* import sys
+* import os
+* import glob
+* import pandas as pd
+
+3. Download SRA Tool form the link (https://www.metagenomics.wiki/tools/short-read/ncbi-sra-file-format/sra-tools-install)
+4. Download bbtools and local-blast
+5. Silvadb: silva.fasta
 
 #### Step 1. Download Raw sequences (SRR) from NCBI and Perform fasterq-dump for extract data in Fastq from SRA-accessions
 
 1) Open bioproject_sample_ids.txt file and edit it with your bioproject and sample ID's which you want to download
 
-2) Run "download_raw_reads.sh" Script in the terminal. This script will read all the ids from bioproject_ids.txt file and it will download all the samples in fastq format
+2) Run "download_raw_reads.py" python script from the terminal. This script will read all the ids from bioproject_ids.txt file and it will download all the samples in fastq format
 
 ```
-$ chmod 755 download_raw_reads.sh
-$ ./download_raw_reads.sh
+$ python3 download_raw_reads.py
 
 *Note you will get all downloaded sample with BioprojectID folder in the data_sets directory
 ```
@@ -25,10 +32,10 @@ $ ./download_raw_reads.sh
 $ locate bbmerge.sh
 ```
 
-2) run mergeblast.sh script
+2) run mergeblast.py python script
+
 ```
-$chmod 755 mergeblast.sh
-$ ./mergeblast.sh
+$ python3 mergeblast.py
 ```
 
 
