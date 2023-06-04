@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 ## Author: This script Written by  Abhishek Khatri 
 ## Remember to edit bioproject_sample_ids.txt file
 
