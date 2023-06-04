@@ -17,7 +17,7 @@ import pandas as pd
 5. Silvadb: silva.fasta
 
 ### STEPS
-#### Step 1. Download Raw sequences (SRR) from NCBI and Perform fasterq-dump for extract data in Fastq from SRA-accessions
+#### Step 1. To download raw sequences (SRR) from NCBI and Perform fasterq-dump for extract data in Fastq from SRA-accessions
 
 1) Open bioproject_sample_ids.txt file and edit it with your bioproject and sample ID's which you want to download
 
