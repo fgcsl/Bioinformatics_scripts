@@ -4,11 +4,13 @@
 1. python3
 
 2. Python Modules:
+```
         * import subprocess
         * import sys
         * import os
         * import glob
         * import pandas as pd
+        ```
 
 3. Download SRA Tool form the link (https://www.metagenomics.wiki/tools/short-read/ncbi-sra-file-format/sra-tools-install)
 4. Download bbtools and local-blast
