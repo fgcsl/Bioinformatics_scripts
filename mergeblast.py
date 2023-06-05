@@ -1,8 +1,3 @@
-#!/usr/bin/python3
-
-## Author: This script Written by  Abhishek Khatri 
-## Remember to edit bioproject_sample_ids.txt file
-
 import subprocess
 import pandas as pd
 import os
@@ -113,7 +108,11 @@ def seqtk_blastn(df):
                 t20,
                 "-db", "silvadb_out/silva",
                 "-out",
-                output_dir+"/blastn_output.txt"
+                output_dir+"/blastn_output.txt",
+                "-outfmt",
+                "6 sstart send evalue bitscore pident qcovs",
+                "-subject_besthit",
+                "-max_target_seqs=1"
                 
             ]
 
@@ -165,5 +164,5 @@ copy =[
 subprocess.run(copy)
 
 for i in prj_ids:
-    delete_shell = "sed -i '/{}/d' refine_bioproject_sample_ids.txt".format(i)
+    delete_shell = [ "sed -i '/{}/d' refine_bioproject_sample_ids.txt".format(i) ]
     subprocess.run(delete_shell, shell=True)
